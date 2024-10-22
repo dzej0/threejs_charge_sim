@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Electrostatic Charge Simulator</title>
+  <link rel="stylesheet" href="style.css">
+  
+  <script src="user_input.js" type="module"></script>
+  <script src="objects/physObj.js" type="module"></script>
+  <script src="main.js" type="module"></script>
+</head>
+<body>
+  <div id="main" style="display:flex">
+    <div id="sim-container">
+      <div id="top-display">Simulation</div>
+      <div id="sim" style="height: 800; width: 800;"></div>
+      <div id="bottom-display">
+        <div style="float: left; width: 50%;">
+          <button id="pause">⏵</button>
+        </div>
+        <div>
+          Sim precision (higher value - slower, more accurate)
+          <input id="sim-precision" type="range" min="0.01" max="3" step="0.01" style="width: 15%;">
+        </div>
+      </div>
+    </div>
+    <div id="menu" style="width: 200px">
+      Add new charge<br>
+      Moveable: <input type="checkbox" id="input_moveable"><br>
+      Mass: <input type="number" id="input_mass"><br>
+      Charge: <input type="number" id="input_charge"><br>
+      Initial velocity:<br>
+      x: <input type="number" id="input_v_x"><br>
+      y: <input type="number" id="input_v_y"><br>
+      z: <input type="number" id="input_v_z"><br>
+      Position:<br>
+      x: <input type="number" id="input_pos_x"><br>
+      y: <input type="number" id="input_pos_y"><br>
+      z: <input type="number" id="input_pos_z"><br><br>
+      <button id="big_button">Add [Enter]</button>
+    </div>
+  </div>
+  </body>
+</html>
