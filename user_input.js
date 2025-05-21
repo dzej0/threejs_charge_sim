@@ -4,8 +4,8 @@ import { PhysObj } from './objects/physObj'
 const pauseButton = document.getElementById("pause")
 
 // ids of various input fields
-const [moveable, mass, charge, vx, vy, vz, px, py, pz] 
-    = ["input_moveable", "input_mass", "input_charge", "input_v_x", "input_v_y", "input_v_z", "input_pos_x", "input_pos_y", "input_pos_z"]
+const [moveable,          mass,         charge,         vx,           vy,           vz,           px,             py,             pz] 
+    = ["input_moveable",  "input_mass", "input_charge", "input_v_x",  "input_v_y",  "input_v_z",  "input_pos_x",  "input_pos_y",  "input_pos_z"]
 
 
 function getDataFromElementId(id) {
@@ -22,12 +22,12 @@ function getDataFromElementId(id) {
     return 0
   }
 
-  if (isNaN(parseInt(document.getElementById(id).value))) {
+  if (isNaN(parseFloat(document.getElementById(id).value))) {
     return 0
   }
 
-  console.log(parseInt(document.getElementById(id).value))
-  return parseInt(document.getElementById(id).value)
+  console.log(parseFloat(document.getElementById(id).value))
+  return parseFloat(document.getElementById(id).value)
 }
 
 function addObjectToScene(moveable, mass, charge, velocity, position, scene) {
@@ -39,7 +39,6 @@ function addObjectFromUserInput(scene) {
     window.alert("mass of an object can't be 0")
     return 0
   }
-  
   addObjectToScene(getDataFromElementId(moveable), 
     getDataFromElementId(mass), 
     getDataFromElementId(charge), 
@@ -51,32 +50,45 @@ function addObjectFromUserInput(scene) {
     getDataFromElementId(pz)), scene)
 }
 
-export function addButton(scene) {
+export function addButtonEvents(scene) {
   document.addEventListener("keydown", (key) => {
     console.log(key.key)
     if (key.key == "Enter") {
-      document.getElementById("big_button").click()
+      document.getElementById("add_button").click()
+    } else if (key.key == " ") {
+      document.getElementById("pause").click()
     }
   })
-  document.getElementById("big_button").addEventListener("click", () => {
+  document.getElementById("add_button").addEventListener("click", () => {
     console.log("click")
     addObjectFromUserInput(scene)
   })
+  
 }
 
-document.getElementById(moveable).addEventListener("click", () => {
-  console.log("test")
+const cPaused = "#ffcf3d"
+const cUnpaused = "#117d2e"
+
+const sPaused = "▶"
+const sUnpaused = "⏸"
+
+document.addEventListener("DOMContentLoaded", ()=> {
+  pauseButton.style.backgroundColor = cUnpaused
+  pauseButton.innerHTML = sUnpaused
 })
 
-// fix this firing twice
+export let paused = false
 
-pauseButton.addEventListener("click", () => {
-  console.log(pauseButton.getAttribute("on"))
-  if (pauseButton.getAttribute("on") == 1) {
-    pauseButton.setAttribute("on", 0)
-    pauseButton.style.backgroundColor = "#941e06"
+pauseButton.onclick = () => {
+  paused = !paused;
+
+  if (paused) {
+    console.log("setting to paused")
+    pauseButton.style.backgroundColor = cPaused
+    pauseButton.innerHTML = sPaused
   } else {
-    pauseButton.setAttribute("on", 1)
-    pauseButton.style.backgroundColor = "#117d2e"
+    console.log("setting to unpaused")
+    pauseButton.style.backgroundColor = cUnpaused
+    pauseButton.innerHTML = sUnpaused
   }
-})
+}

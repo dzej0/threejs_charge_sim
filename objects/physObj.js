@@ -3,12 +3,16 @@ import { Vector3 } from "three"
 
 const k = 0.1
 
-function calcDistance(pos1, pos2) {
+function distance(vec1, vec2) {
+  return Math.sqrt(sqrDistance(vec1, vec2))
+}
+
+function sqrDistance(vec1, vec2) {
   let x,y,z
-  x = pos2.x - pos1.x
-  y = pos2.y - pos1.y
-  z = pos2.z - pos1.z
-  return Math.sqrt(Math.pow(x,2) + Math.pow(y,2) + Math.pow(z,2))
+  x = vec2.x - vec1.x
+  y = vec2.y - vec1.y
+  z = vec2.z - vec1.z
+  return (x*x) + (y*y) + (z*z)
 }
 
 export class PhysObj {
@@ -16,12 +20,13 @@ export class PhysObj {
   static objectList = []
 
   moveable = new Boolean
-  mass
-  charge
+  mass = new Number
+  charge = new Number
 
   velocity = new Vector3
 
   constructor(moveable, mass, charge, velocity, position, scene) {
+    
     console.log("Creating object with parameters:")
     console.log(moveable) 
     console.log(mass) 
@@ -36,7 +41,7 @@ export class PhysObj {
     
     const positive_material = new THREE.MeshStandardMaterial( {color:0xff0000} )
     const negative_material = new THREE.MeshStandardMaterial( {color:0x0000ff} )
-    const neutral_material = new THREE.MeshStandardMaterial({color:0x333333})
+    const neutral_material = new THREE.MeshStandardMaterial(  {color:0x333333} )
 
     const sphere_geometry = new THREE.SphereGeometry(1, 64, 64)
     
@@ -86,7 +91,7 @@ export class PhysObj {
   static tick(delta) {
     for (let i = 0; i < PhysObj.objectList.length; i++) {
       for (let j = i + 1; j < PhysObj.objectList.length; j++) {
-        if (calcDistance(PhysObj.objectList[i].worldObject.position, PhysObj.objectList[j].worldObject.position) == 0) {
+        if (sqrDistance(PhysObj.objectList[i].worldObject.position, PhysObj.objectList[j].worldObject.position) == 0) {
           console.warn(`Distance between objects ${i} and ${j} is 0`)
           console.warn(PhysObj.objectList[i], PhysObj.objectList[j])
           console.warn(`Moving objects away`)
@@ -96,7 +101,7 @@ export class PhysObj {
         }
         let forceValue = 
         k * PhysObj.objectList[i].charge * PhysObj.objectList[j].charge 
-        / Math.pow(calcDistance(PhysObj.objectList[i].worldObject.position, PhysObj.objectList[j].worldObject.position), 2)
+        / sqrDistance(PhysObj.objectList[i].worldObject.position, PhysObj.objectList[j].worldObject.position)
 
         let force = new THREE.Vector3
         force.x = PhysObj.objectList[i].worldObject.position.x - PhysObj.objectList[j].worldObject.position.x
@@ -115,9 +120,5 @@ export class PhysObj {
 
   static editObject(index, callback) {
     callback(PhysObj.objectList[index])
-  }
-
-  static removeAllObjects() {
-    PhysObj.objectList = []
   }
 }

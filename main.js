@@ -1,32 +1,39 @@
 import * as THREE from 'three'
 import { TrackballControls } from 'three/addons/controls/TrackballControls.js'
 import { PhysObj } from './objects/physObj'
-import { addButton } from './user_input'
+import { addButtonEvents } from './user_input'
+import { paused } from './user_input'
 
 const screen = document.getElementById("sim")
-const aspectRatio = 1 / 1
+
+const width = 1200
+const height = 800
+
+const aspectRatio = width / height
 
 const scene = new THREE.Scene()
 const camera = new THREE.PerspectiveCamera(70, aspectRatio, 0.1, 200000)
 
+// renderer
 const renderer = new THREE.WebGLRenderer()
-renderer.setSize(800, 800)
+renderer.setSize(width, height)
 screen.appendChild(renderer.domElement)
 
 let controls
 const clock = new THREE.Clock()
 const cameraLight = new THREE.PointLight(0xffffff, 1, 0, 4)
 
-let bolo, kolo, tolo
+// initial object
+let bolo
 
-function addXYZaxis(length) {
+function addXYZaxes(length) {
   const pointsX = [new THREE.Vector3(-length, 0, 0), new THREE.Vector3(length, 0, 0)]
   const pointsY = [new THREE.Vector3(0, -length, 0), new THREE.Vector3(0, length, 0)]
   const pointsZ = [new THREE.Vector3(0, 0, -length), new THREE.Vector3(0, 0, length)]
 
-  const XAxisMaterial = new THREE.LineBasicMaterial({color:0xff0000})
-  const YAxisMaterial = new THREE.LineBasicMaterial({color:0x00ff00})
-  const ZAxisMaterial = new THREE.LineBasicMaterial({color:0x0000ff})
+  const XAxisMaterial = new THREE.LineBasicMaterial({color:0xaa0000})
+  const YAxisMaterial = new THREE.LineBasicMaterial({color:0x00aa00})
+  const ZAxisMaterial = new THREE.LineBasicMaterial({color:0x0000aa})
 
   const Xaxisgeometry = new THREE.BufferGeometry().setFromPoints(pointsX)
   const Yaxisgeometry = new THREE.BufferGeometry().setFromPoints(pointsY)
@@ -40,12 +47,9 @@ function addXYZaxis(length) {
 }
 
 function init() {
-  PhysObj.removeAllObjects()
-
   new PhysObj(0, 1, -5, new THREE.Vector3(0,0,0), new THREE.Vector3(0,0,0), scene)
   new PhysObj(1, 1,  5, new THREE.Vector3(0,0,1), new THREE.Vector3(3,0,0), scene)
   new PhysObj(1, 1, 5, new THREE.Vector3(0,0,0), new THREE.Vector3(3,5,0), scene)
-  //tolo = new PhysObj(1, 1,  2, new THREE.Vector3(0,0,0), new THREE.Vector3(0,3,0), scene)
   console.log(PhysObj.objectList)
 
   const ambientLighting = new THREE.AmbientLight(0xffffff, 0.8)
@@ -61,14 +65,15 @@ function init() {
   controls.zoomSpeed = 1.2;
   controls.panSpeed = 0.8;
   controls.keys = [ 'KeyA', 'KeyS', 'KeyD' ]
-  screen.addEventListener('click', () => {
+  // todo usunac?
+  // screen.addEventListener('click', () => {
     
-  })
+  // })
 
-  addXYZaxis(2000)
+  addXYZaxes(2000)
 }
 
-let paused, delta 
+let delta 
 let precision
 function animate() {
   requestAnimationFrame(animate)
@@ -78,7 +83,7 @@ function animate() {
   precision = document.getElementById("sim-precision").value
   if (!paused) {
     PhysObj.tick((1/precision)*delta)
-    console.log(precision)
+    //console.log(precision)
   }
 
   controls.update()
@@ -92,10 +97,11 @@ function debug() {
   console.log(bolo)
 }
 
+// debug
 document.addEventListener('keydown', (key) => {
   if (key.key == 'k') {
     console.log(camera.rotation)
-    
+    console.log(`paused: ${paused}`)
     debug()
   }
 
@@ -111,10 +117,6 @@ document.addEventListener('keydown', (key) => {
     console.log(PhysObj.objectList)
   }
 
-  if (key.key == 'p') {
-    paused ? paused = 0 : paused = 1
-  }
-
   if (key.key == 'a') {
     PhysObj.editObject(2, (object) => {
       object.changePosition(new THREE.Vector3(0,4,0))
@@ -125,8 +127,15 @@ document.addEventListener('keydown', (key) => {
   }
 })
 
+document.getElementById("clear_button").addEventListener("click", () => {
+    PhysObj.objectList.forEach((obj) => {
+      scene.remove(obj.worldObject)
+    })
+    PhysObj.objectList = []
+})
+
 document.addEventListener("DOMContentLoaded", () => {
   init()
   animate()
-  addButton(scene)
+  addButtonEvents(scene)
 })

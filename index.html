@@ -6,19 +6,16 @@
 
   <title>Electrostatic Charge Simulator</title>
   <link rel="stylesheet" href="style.css">
-  
-  <script src="user_input.js" type="module"></script>
-  <script src="objects/physObj.js" type="module"></script>
-  <script src="main.js" type="module"></script>
 </head>
 <body>
+  <noscript><p style="color: red">Please enable JavaScript to run this website</p></noscript>
   <div id="main" style="display:flex">
-    <div id="sim-container">
+    <div id="sim-container" style="display: flex; flex-direction: column;">
       <div id="top-display">Simulation</div>
-      <div id="sim" style="height: 800; width: 800;"></div>
+      <div id="sim"></div>
       <div id="bottom-display">
-        <div style="float: left; width: 50%;">
-          <button id="pause">⏵</button>
+        <div>
+          <button id="pause" style="background-color: rgb(17, 125, 46); text-align: center; width: 30px; height: 30px;">▶</button>
         </div>
         <div>
           Sim precision (higher value - slower, more accurate)
@@ -26,21 +23,32 @@
         </div>
       </div>
     </div>
-    <div id="menu" style="width: 200px">
-      Add new charge<br>
-      Moveable: <input type="checkbox" id="input_moveable"><br>
-      Mass: <input type="number" id="input_mass"><br>
-      Charge: <input type="number" id="input_charge"><br>
-      Initial velocity:<br>
-      x: <input type="number" id="input_v_x"><br>
-      y: <input type="number" id="input_v_y"><br>
-      z: <input type="number" id="input_v_z"><br>
-      Position:<br>
-      x: <input type="number" id="input_pos_x"><br>
-      y: <input type="number" id="input_pos_y"><br>
-      z: <input type="number" id="input_pos_z"><br><br>
-      <button id="big_button">Add [Enter]</button>
+    <div id="menu" style="display: flex; flex-direction: column; width: 20%">
+      <div id="menu_top">
+        <div>
+          Add new charge<br>
+          Moveable: <input type="checkbox" id="input_moveable"><br>
+          Mass: <input type="number" id="input_mass" value="1"><br>
+          Charge: <input type="number" id="input_charge" value="1"><br>
+          Initial velocity:<br>
+          x: <input type="number" id="input_v_x" value="0"><br>
+          y: <input type="number" id="input_v_y" value="0"><br>
+          z: <input type="number" id="input_v_z" value="0"><br>
+          Position:<br>
+          x: <input type="number" id="input_pos_x" value="0"><br>
+          y: <input type="number" id="input_pos_y" value="0"><br>
+          z: <input type="number" id="input_pos_z" value="0"><br><br>
+        </div>
+        
+        <button class="button" id="add_button">Add [Enter]</button>
+      </div>
+      <div id="menu_bottom" style="display: flex; flex-direction: row; flex: 1; ">
+        <button class="button" id="clear_button" style="background-color: rgb(150, 0, 0);margin-top: auto;">Clear Scene</button>
+      </div>
     </div>
   </div>
+  <script src="user_input.js" type="module"></script>
+  <script src="objects/physObj.js" type="module"></script>
+  <script src="main.js" type="module"></script>
   </body>
 </html>
