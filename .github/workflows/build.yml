@@ -57,6 +57,5 @@ jobs:
     - name: trigger build and deploy scripts at portfolio repo
       uses: peter-evans/repository_dispatch@v3
       with:
-        token: ${{ GITHUB_TOKEN }}
         repository: dzej0/dzej0.github.com
         event-type: "update_projects"
