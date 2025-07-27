@@ -52,6 +52,7 @@ jobs:
         fi
 
   update-portfolio:
+    permissions: write-all
     needs: build
     runs-on: ubuntu-latest
     steps:
