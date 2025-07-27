@@ -51,9 +51,13 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
+    - name: checkout
+      uses: actions/checkout@v4  
+    
     - name: trigger build and deploy scripts at portfolio repo
       uses: peter-evans/repository-dispatch@v3
       with:
         token: ${{ secrets.GITHUB_TOKEN }}
         repository: dzej0/dzej0.github.com
         event-type: update_projects
+
