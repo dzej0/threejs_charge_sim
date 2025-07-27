@@ -45,6 +45,7 @@ jobs:
         if git diff --quiet; then
             echo No changes, not commiting
         else
+            git pull
             git add .
             git commit -m "build"
             git push https://x-access-token:${GITHUB_TOKEN}@github.com/dzej0/threejs_charge_sim HEAD:main
